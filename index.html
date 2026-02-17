@@ -11,10 +11,10 @@
 --bg1:#0f0c29;
 --bg2:#1a1240;
 --bg3:#000;
---glass:rgba(255,255,255,0.05);
+--glass:rgba(255,255,255,0.06);
 --text:white;
 --headerH:60px;
---fontSize:16px;
+--fontSize:20px;
 }
 
 /* LIGHT MODE */
@@ -48,9 +48,10 @@ justify-content:center;
 background:var(--glass);
 backdrop-filter:blur(20px);
 z-index:100;
+font-size:16px;
 }
 
-/* DARK TOGGLE */
+/* DARK MODE SWITCH */
 .dark-toggle{
 position:absolute;
 right:16px;
@@ -93,47 +94,67 @@ will-change:transform;
 
 .spacer{height:0;}
 
+/* ORB */
 .orb{
-width:80px;
-height:80px;
-margin:10px auto 14px auto;
+width:90px;
+height:90px;
+margin:10px auto 18px auto;
 border-radius:50%;
 background:radial-gradient(circle,#f6c453,#ff7a00);
+box-shadow:0 0 20px rgba(255,150,0,.3);
 }
 
-/* MANTRA */
+/* MANTRA — MOBILE OPTIMIZED */
 .mantra-card{
-margin:4px 14px;
-padding:8px 12px;
-border-radius:12px;
+margin:6px 16px;
+padding:12px 14px;
+border-radius:14px;
 display:flex;
 align-items:center;
 background:var(--glass);
-font-size:var(--fontSize);
-opacity:.55;
-transform:scale(.96);
-transition:.25s ease;
+
+font-size:clamp(20px,4.5vw,26px);
+line-height:1.6;
+font-weight:500;
+
+opacity:.45;
+transform:scale(.92);
+
+transition:
+transform .25s ease,
+opacity .25s ease,
+box-shadow .25s ease,
+border .25s ease;
 }
 
+/* CENTER HIGHLIGHT */
+.mantra-card.focused{
+opacity:1;
+transform:scale(1.12);
+border:1px solid rgba(255,140,0,.45);
+box-shadow:0 0 18px rgba(255,140,0,.25);
+}
+
+/* NUMBER */
 .index{
-min-width:26px;
-height:26px;
+min-width:34px;
+height:34px;
 border-radius:50%;
 background:linear-gradient(135deg,#ff7a00,#f6c453);
 display:flex;
 justify-content:center;
 align-items:center;
-margin-right:10px;
-font-size:12px;
+margin-right:12px;
+font-size:15px;
 }
 
-/* PLAY */
+/* PLAY BUTTON */
 .play-main{
 position:fixed;
 bottom:22px;
 left:50%;
 transform:translateX(-50%);
-padding:14px 26px;
+padding:14px 28px;
 border-radius:40px;
 background:linear-gradient(135deg,#ff7a00,#f6c453);
 color:white;
@@ -159,7 +180,7 @@ cursor:pointer;
 z-index:60;
 }
 
-/* PANEL */
+/* SETTINGS PANEL */
 .panel{
 position:fixed;
 bottom:-260px;
@@ -229,7 +250,7 @@ input[type=range]{width:100%}
 
 <div class="panel" id="panel">
 <label>Font Size</label>
-<input type="range" id="fontSlider" min="14" max="26" value="16">
+<input type="range" id="fontSlider" min="18" max="34" value="20">
 <label>Flow Speed</label>
 <input type="range" id="speed" min="1" max="10" value="5">
 </div>
@@ -262,8 +283,15 @@ list.querySelectorAll(".mantra-card").forEach(card=>{
 const r=card.getBoundingClientRect();
 const dist=Math.abs(center-(r.top+r.height/2));
 const ratio=Math.min(dist/(scrollArea.offsetHeight/2),1);
-card.style.transform=`scale(${1.05-(ratio*0.08)})`;
-card.style.opacity=.95-(ratio*0.45);
+
+const scale=1.12-(ratio*0.20);
+const opacity=1-(ratio*0.65);
+
+card.style.transform=`scale(${scale})`;
+card.style.opacity=opacity;
+
+if(ratio<0.08) card.classList.add("focused");
+else card.classList.remove("focused");
 });
 }
 
@@ -276,7 +304,7 @@ updateFocus();
 /* auto */
 function animate(){
 if(!playing||dragging) return;
-offset+=speed.value*0.15;
+offset+=speed.value*0.18;
 
 const max=list.scrollHeight-scrollArea.offsetHeight;
 if(offset>=max){
@@ -286,6 +314,7 @@ playBtn.innerText="↻ Restart";
 apply();
 return;
 }
+
 apply();
 requestAnimationFrame(animate);
 }
