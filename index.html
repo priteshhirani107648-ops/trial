@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>શ્રી સર્વમંગલ નામાવલી</title>
+
+<style>
+:root{
+--primary:#FF7A00;
+--bg1:#0f0c29;
+--bg2:#1a1240;
+--bg3:#000;
+--glass:rgba(255,255,255,0.05);
+--text:white;
+--headerH:60px;
+--fontSize:16px;
+}
+
+/* LIGHT MODE */
+body.light{
+--bg1:#f6f7fb;
+--bg2:#ffffff;
+--bg3:#ffffff;
+--glass:rgba(0,0,0,0.05);
+--text:#222;
+}
+
+body{
+margin:0;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+color:var(--text);
+background:linear-gradient(160deg,var(--bg1),var(--bg2),var(--bg3));
+overflow:hidden;
+transition:.35s;
+}
+
+/* HEADER */
+.header{
+position:fixed;
+top:0;
+left:0;
+right:0;
+height:var(--headerH);
+display:flex;
+align-items:center;
+justify-content:center;
+backdrop-filter:blur(20px);
+background:var(--glass);
+z-index:100;
+font-size:15px;
+}
+
+/* DARK TOGGLE TOP RIGHT */
+.dark-toggle{
+position:absolute;
+right:16px;
+top:50%;
+transform:translateY(-50%);
+width:46px;
+height:26px;
+border-radius:30px;
+background:#777;
+cursor:pointer;
+}
+.dark-toggle::after{
+content:"";
+position:absolute;
+width:20px;
+height:20px;
+background:white;
+border-radius:50%;
+top:3px;
+left:3px;
+transition:.3s;
+}
+.dark-toggle.active{
+background:#ff7a00;
+}
+.dark-toggle.active::after{
+left:23px;
+}
+
+/* MAIN */
+.main{padding-top:var(--headerH);}
+
+.scroll-area{
+height:75vh;
+overflow:hidden;
+position:relative;
+touch-action:none;
+}
+
+.mantra-list{
+position:absolute;
+width:100%;
+will-change:transform;
+}
+
+/* ORB */
+.orb{
+width:80px;
+height:80px;
+margin:10px auto 14px auto;
+border-radius:50%;
+background:radial-gradient(circle,#f6c453,#ff7a00);
+}
+
+/* MANTRA (CALM FOCUS SYSTEM) */
+.mantra-card{
+margin:4px 14px;
+padding:8px 12px;
+border-radius:12px;
+display:flex;
+align-items:center;
+background:var(--glass);
+font-size:var(--fontSize);
+opacity:.55;
+transform:scale(.96);
+transition:.25s ease;
+}
+
+.index{
+min-width:26px;
+height:26px;
+border-radius:50%;
+background:linear-gradient(135deg,#ff7a00,#f6c453);
+display:flex;
+justify-content:center;
+align-items:center;
+margin-right:10px;
+font-size:12px;
+}
+
+/* PLAY BUTTON */
+.play-main{
+position:fixed;
+bottom:22px;
+left:50%;
+transform:translateX(-50%);
+padding:14px 26px;
+border-radius:40px;
+background:linear-gradient(135deg,#ff7a00,#f6c453);
+color:white;
+font-weight:600;
+cursor:pointer;
+z-index:50;
+}
+
+/* SETTINGS BUTTON */
+.fab{
+position:fixed;
+bottom:22px;
+right:18px;
+width:52px;
+height:52px;
+border-radius:50%;
+background:linear-gradient(135deg,#ff7a00,#f6c453);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:22px;
+cursor:pointer;
+z-index:60;
+}
+
+/* SETTINGS PANEL (TOP LAYER) */
+.panel{
+position:fixed;
+bottom:-260px;
+left:0;
+right:0;
+padding:22px;
+background:rgba(0,0,0,.6);
+backdrop-filter:blur(35px);
+border-radius:28px 28px 0 0;
+transition:.35s ease;
+display:flex;
+flex-direction:column;
+gap:18px;
+z-index:200;
+}
+.panel.show{bottom:0}
+
+input[type=range]{width:100%}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+🛕 શ્રી સર્વમંગલ નામાવલી
+<div class="dark-toggle" id="darkToggle"></div>
+</div>
+
+<div class="main">
+
+<div class="scroll-area" id="scrollArea">
+<div class="mantra-list" id="list">
+
+<div class="orb"></div>
+
+<div class="mantra-card"><div class="index">૧</div><div>ૐ શ્રી સર્વમંગલાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૨</div><div>ૐ શ્રી સદ્રૂપાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૩</div><div>ૐ શ્રી સત્કૃતાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૪</div><div>ૐ શ્રી શાંતાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૫</div><div>ૐ શ્રી દિવ્યમંગલાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૬</div><div>ૐ શ્રી કરુણામયાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૭</div><div>ૐ શ્રી ભક્તવત્સલાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૮</div><div>ૐ શ્રી દયાળુદેવાય નમઃ</div></div>
+
+</div>
+</div>
+
+</div>
+
+<div class="play-main" id="playBtn">▶ Start</div>
+<div class="fab" id="settingsBtn">⚙</div>
+
+<div class="panel" id="panel">
+<label>Font Size</label>
+<input type="range" id="fontSlider" min="14" max="26" value="16">
+
+<label>Flow Speed</label>
+<input type="range" id="speed" min="1" max="10" value="5">
+</div>
+
+<script>
+const list=document.getElementById("list");
+const scrollArea=document.getElementById("scrollArea");
+const speed=document.getElementById("speed");
+const playBtn=document.getElementById("playBtn");
+const panel=document.getElementById("panel");
+const settingsBtn=document.getElementById("settingsBtn");
+const darkToggle=document.getElementById("darkToggle");
+const fontSlider=document.getElementById("fontSlider");
+
+let offset=0,playing=false,dragging=false,startY,startOffset;
+
+/* infinite list */
+list.innerHTML+=list.innerHTML;
+
+/* focus effect */
+function updateFocus(){
+const center=scrollArea.getBoundingClientRect().top + scrollArea.offsetHeight/2;
+list.querySelectorAll(".mantra-card").forEach(card=>{
+const r=card.getBoundingClientRect();
+const dist=Math.abs(center-(r.top+r.height/2));
+const ratio=Math.min(dist/(scrollArea.offsetHeight/2),1);
+
+card.style.transform=`scale(${1.05-(ratio*0.08)})`;
+card.style.opacity=.95-(ratio*0.45);
+});
+}
+
+/* apply scroll */
+function apply(){
+list.style.transform=`translateY(-${offset}px)`;
+if(offset>=list.scrollHeight/2) offset=0;
+if(offset<0) offset=list.scrollHeight/2;
+updateFocus();
+}
+
+/* auto */
+function animate(){
+if(!playing||dragging) return;
+offset+=speed.value*0.15;
+apply();
+requestAnimationFrame(animate);
+}
+
+/* play */
+playBtn.onclick=()=>{
+playing=!playing;
+playBtn.innerText=playing?"⏸ Pause":"▶ Start";
+if(playing) animate();
+};
+
+/* settings open */
+settingsBtn.onclick=(e)=>{
+e.stopPropagation();
+panel.classList.toggle("show");
+};
+
+/* click outside close */
+document.addEventListener("click",e=>{
+if(!panel.contains(e.target) && !settingsBtn.contains(e.target)){
+panel.classList.remove("show");
+}
+});
+
+/* dark mode */
+darkToggle.onclick=()=>{
+darkToggle.classList.toggle("active");
+document.body.classList.toggle("light");
+};
+
+/* font */
+fontSlider.oninput=e=>{
+document.documentElement.style.setProperty("--fontSize",e.target.value+"px");
+};
+
+/* drag scroll */
+scrollArea.onpointerdown=e=>{
+dragging=true;
+startY=e.clientY;
+startOffset=offset;
+};
+scrollArea.onpointermove=e=>{
+if(!dragging) return;
+offset=startOffset-(e.clientY-startY);
+apply();
+};
+scrollArea.onpointerup=()=>{
+dragging=false;
+if(playing) animate();
+};
+</script>
+
+</body>
+</html>
