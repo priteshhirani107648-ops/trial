@@ -48,10 +48,8 @@ justify-content:center;
 backdrop-filter:blur(20px);
 background:var(--glass);
 z-index:100;
-font-size:15px;
 }
 
-/* DARK TOGGLE TOP RIGHT */
 .dark-toggle{
 position:absolute;
 right:16px;
@@ -74,14 +72,9 @@ top:3px;
 left:3px;
 transition:.3s;
 }
-.dark-toggle.active{
-background:#ff7a00;
-}
-.dark-toggle.active::after{
-left:23px;
-}
+.dark-toggle.active{background:#ff7a00;}
+.dark-toggle.active::after{left:23px;}
 
-/* MAIN */
 .main{padding-top:var(--headerH);}
 
 .scroll-area{
@@ -97,7 +90,6 @@ width:100%;
 will-change:transform;
 }
 
-/* ORB */
 .orb{
 width:80px;
 height:80px;
@@ -106,7 +98,7 @@ border-radius:50%;
 background:radial-gradient(circle,#f6c453,#ff7a00);
 }
 
-/* MANTRA (CALM FOCUS SYSTEM) */
+/* calm focus */
 .mantra-card{
 margin:4px 14px;
 padding:8px 12px;
@@ -132,7 +124,7 @@ margin-right:10px;
 font-size:12px;
 }
 
-/* PLAY BUTTON */
+/* play */
 .play-main{
 position:fixed;
 bottom:22px;
@@ -147,7 +139,7 @@ cursor:pointer;
 z-index:50;
 }
 
-/* SETTINGS BUTTON */
+/* settings */
 .fab{
 position:fixed;
 bottom:22px;
@@ -164,7 +156,6 @@ cursor:pointer;
 z-index:60;
 }
 
-/* SETTINGS PANEL (TOP LAYER) */
 .panel{
 position:fixed;
 bottom:-260px;
@@ -194,7 +185,6 @@ input[type=range]{width:100%}
 </div>
 
 <div class="main">
-
 <div class="scroll-area" id="scrollArea">
 <div class="mantra-list" id="list">
 
@@ -211,7 +201,6 @@ input[type=range]{width:100%}
 
 </div>
 </div>
-
 </div>
 
 <div class="play-main" id="playBtn">▶ Start</div>
@@ -220,7 +209,6 @@ input[type=range]{width:100%}
 <div class="panel" id="panel">
 <label>Font Size</label>
 <input type="range" id="fontSlider" min="14" max="26" value="16">
-
 <label>Flow Speed</label>
 <input type="range" id="speed" min="1" max="10" value="5">
 </div>
@@ -237,59 +225,67 @@ const fontSlider=document.getElementById("fontSlider");
 
 let offset=0,playing=false,dragging=false,startY,startOffset;
 
-/* infinite list */
-list.innerHTML+=list.innerHTML;
-
-/* focus effect */
+/* focus */
 function updateFocus(){
 const center=scrollArea.getBoundingClientRect().top + scrollArea.offsetHeight/2;
 list.querySelectorAll(".mantra-card").forEach(card=>{
 const r=card.getBoundingClientRect();
 const dist=Math.abs(center-(r.top+r.height/2));
 const ratio=Math.min(dist/(scrollArea.offsetHeight/2),1);
-
 card.style.transform=`scale(${1.05-(ratio*0.08)})`;
 card.style.opacity=.95-(ratio*0.45);
 });
 }
 
-/* apply scroll */
+/* apply */
 function apply(){
 list.style.transform=`translateY(-${offset}px)`;
-if(offset>=list.scrollHeight/2) offset=0;
-if(offset<0) offset=list.scrollHeight/2;
 updateFocus();
 }
 
 /* auto */
 function animate(){
 if(!playing||dragging) return;
+
 offset+=speed.value*0.15;
+
+/* STOP AT END */
+const maxScroll=list.scrollHeight-scrollArea.offsetHeight;
+if(offset>=maxScroll){
+offset=maxScroll;
+playing=false;
+playBtn.innerText="↻ Restart";
+apply();
+return;
+}
+
 apply();
 requestAnimationFrame(animate);
 }
 
 /* play */
 playBtn.onclick=()=>{
+if(!playing && playBtn.innerText==="↻ Restart"){
+offset=0;
+}
+
 playing=!playing;
 playBtn.innerText=playing?"⏸ Pause":"▶ Start";
 if(playing) animate();
 };
 
-/* settings open */
-settingsBtn.onclick=(e)=>{
+/* settings */
+settingsBtn.onclick=e=>{
 e.stopPropagation();
 panel.classList.toggle("show");
 };
-
-/* click outside close */
 document.addEventListener("click",e=>{
-if(!panel.contains(e.target) && !settingsBtn.contains(e.target)){
+if(!panel.contains(e.target)&&!settingsBtn.contains(e.target)){
 panel.classList.remove("show");
 }
 });
 
-/* dark mode */
+/* theme */
 darkToggle.onclick=()=>{
 darkToggle.classList.toggle("active");
 document.body.classList.toggle("light");
@@ -300,7 +296,7 @@ fontSlider.oninput=e=>{
 document.documentElement.style.setProperty("--fontSize",e.target.value+"px");
 };
 
-/* drag scroll */
+/* drag */
 scrollArea.onpointerdown=e=>{
 dragging=true;
 startY=e.clientY;
