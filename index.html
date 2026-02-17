@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#FF9933">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>શ્રી સર્વમંગલ નામાવલી</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,6 +147,7 @@ body {
 }
 
 /* MANTRA CARDS */
+/* MANTRA CARDS */
 .mantra-card {
   margin: 10px 20px;
   padding: 14px 20px;
@@ -154,22 +158,16 @@ body {
   border: 1px solid transparent;
   font-size: calc(clamp(20px, 4.5vw, 28px) * var(--fontScale));
   font-weight: 500;
-  opacity: 0.3;
-  transform: scale(0.9);
-  transition: all 0.3s ease-out;
-  will-change: transform, opacity;
+  will-change: transform, opacity, color, background;
+  /* Removed CSS transition to stop jittering during smooth scroll */
 }
 
 .mantra-card.focused {
-  opacity: 1;
-  transform: scale(1.08);
-  background: var(--surface);
-  border: 1px solid var(--primary-glow);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(255, 153, 51, 0.05);
   color: var(--primary);
   font-weight: 600;
+  background: rgba(255, 153, 51, 0.05); /* Very subtle soft background */
+  /* Removed the harsh border and heavy drop-shadows */
 }
-
 .index {
   min-width: 38px;
   height: 38px;
@@ -320,11 +318,111 @@ input[type=range]::-webkit-slider-thumb {
   box-shadow: 0 2px 10px var(--primary-glow);
   border: 2px solid white;
 }
+/* INSTALL POPUP STYLES */
+.install-popup {
+  position: fixed;
+  top: -100px; /* Hidden by default */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+  background: var(--surface);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy slide in */
+}
+
+/* Class to trigger the popup sliding down */
+.install-popup.show {
+  top: calc(var(--headerH) + 16px);
+}
+
+.install-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.install-icon {
+  font-size: 24px;
+  background: rgba(255, 153, 51, 0.15);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.install-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.install-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-main);
+}
+
+.install-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.install-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.install-btn {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px var(--primary-glow);
+}
+
+.install-close {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+}
 </style>
 </head>
 
 <body>
-
+<div id="installPopup" class="install-popup">
+  <div class="install-content">
+    <div class="install-icon">📲</div>
+    <div class="install-text">
+      <div class="install-title">Install App</div>
+      <div class="install-desc">Add to home screen for offline chanting</div>
+    </div>
+  </div>
+  <div class="install-actions">
+    <button id="installBtn" class="install-btn">Install</button>
+    <button id="closeInstallBtn" class="install-close">✕</button>
+  </div>
+</div>
 <div class="header">
   <span style="margin-right: 8px;">🛕</span> શ્રી સર્વમંગલ નામાવલી
   <div class="theme-toggle" id="darkToggle">
@@ -413,6 +511,7 @@ function setSpacers() {
 }
 
 /* FOCUS MATH */
+/* FOCUS MATH */
 function updateFocus() {
   const center = scrollArea.offsetHeight / 2;
   
@@ -421,22 +520,24 @@ function updateFocus() {
     const cardCenter = card.offsetTop + (card.offsetHeight / 2) - offset;
     const dist = Math.abs(center - cardCenter);
     
-    // Create a smooth scale and opacity ratio based on distance from center
-    const maxDist = scrollArea.offsetHeight / 2;
+    // Spread the falloff over a larger distance to make the slope gentler
+    const maxDist = scrollArea.offsetHeight; 
     const ratio = Math.max(0, 1 - (dist / maxDist));
     
-    card.style.transform = `scale(${0.9 + (ratio * 0.18)})`;
-    card.style.opacity = 0.3 + (ratio * 0.7);
+    // Smooth, subtle changes: 
+    // Opacity goes from 0.6 (very readable) to 1.0
+    // Scale goes from 0.96 (barely smaller) to 1.02
+    card.style.transform = `scale(${0.96 + (ratio * 0.06)})`;
+    card.style.opacity = 0.6 + (ratio * 0.4);
     
-    // Toggle active glow class
-    if(ratio > 0.85) {
+    // Apply the subtle primary color when it's near the center
+    if(dist < 70) {
       card.classList.add("focused");
     } else {
       card.classList.remove("focused");
     }
   });
 }
-
 function apply() {
   list.style.transform = `translateY(-${offset}px)`;
   updateFocus();
@@ -582,6 +683,61 @@ darkToggle.onclick = () => {
     document.body.classList.contains("light") ? "light" : "dark"
   );
 };
+/* REGISTER PWA SERVICE WORKER */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker registered successfully.'))
+      .catch(err => console.log('Service Worker registration failed:', err));
+  });
+}
+/* INSTALL PWA LOGIC */
+let deferredPrompt;
+const installPopup = document.getElementById('installPopup');
+const installBtn = document.getElementById('installBtn');
+const closeInstallBtn = document.getElementById('closeInstallBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the default mini-infobar from appearing on mobile
+  e.preventDefault();
+  
+  // Stash the event so it can be triggered later.
+  deferredPrompt = e;
+  
+  // Show our custom premium UI popup after a short delay
+  setTimeout(() => {
+    installPopup.classList.add('show');
+  }, 1500); 
+});
+
+installBtn.addEventListener('click', async () => {
+  // Hide the custom popup
+  installPopup.classList.remove('show');
+  
+  if (deferredPrompt) {
+    // Show the native browser install prompt
+    deferredPrompt.prompt();
+    
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
+    
+    // We've used the prompt, and can't use it again, discard it
+    deferredPrompt = null;
+  }
+});
+
+// Close button logic
+closeInstallBtn.addEventListener('click', () => {
+  installPopup.classList.remove('show');
+});
+
+// If the app successfully installs, hide the popup completely
+window.addEventListener('appinstalled', () => {
+  installPopup.classList.remove('show');
+  deferredPrompt = null;
+  console.log('PWA was successfully installed');
+});
 </script>
 
 </body>
