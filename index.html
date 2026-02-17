@@ -14,8 +14,6 @@
 --glass:rgba(255,255,255,0.06);
 --text:white;
 --headerH:60px;
-
-/* FONT CONTROL */
 --fontScale:1;
 }
 
@@ -52,7 +50,6 @@ backdrop-filter:blur(20px);
 z-index:100;
 }
 
-/* DARK SWITCH */
 .dark-toggle{
 position:absolute;
 right:16px;
@@ -112,14 +109,12 @@ display:flex;
 align-items:center;
 background:var(--glass);
 
-/* RESPONSIVE + USER SCALE */
 font-size:calc(clamp(20px,4.5vw,26px) * var(--fontScale));
 line-height:1.6;
 font-weight:500;
 
 opacity:.45;
 transform:scale(.92);
-
 transition:.25s ease;
 }
 
@@ -242,20 +237,20 @@ input[type=range]{width:100%}
 
 <div class="panel" id="panel">
 <label>Font Size</label>
-<input type="range" id="fontSlider" min="12" max="40" value="20">
+<input type="range" id="fontSlider" min="12" max="40">
 <label>Flow Speed</label>
-<input type="range" id="speed" min="1" max="10" value="5">
+<input type="range" id="speed" min="1" max="10">
 </div>
 
 <script>
-const list=document.getElementById("list");
 const scrollArea=document.getElementById("scrollArea");
+const list=document.getElementById("list");
 const playBtn=document.getElementById("playBtn");
 const speed=document.getElementById("speed");
+const fontSlider=document.getElementById("fontSlider");
+const darkToggle=document.getElementById("darkToggle");
 const panel=document.getElementById("panel");
 const settingsBtn=document.getElementById("settingsBtn");
-const darkToggle=document.getElementById("darkToggle");
-const fontSlider=document.getElementById("fontSlider");
 const topSpace=document.getElementById("topSpace");
 const bottomSpace=document.getElementById("bottomSpace");
 
@@ -281,9 +276,7 @@ const opacity=1-(ratio*0.65);
 
 card.style.transform=`scale(${scale})`;
 card.style.opacity=opacity;
-
-if(ratio<0.08) card.classList.add("focused");
-else card.classList.remove("focused");
+card.classList.toggle("focused",ratio<0.08);
 });
 }
 
@@ -332,7 +325,7 @@ dragging=false;
 if(playing) animate();
 };
 
-/* SETTINGS */
+/* SETTINGS PANEL */
 settingsBtn.onclick=e=>{
 e.stopPropagation();
 panel.classList.toggle("show");
@@ -343,24 +336,51 @@ panel.classList.remove("show");
 }
 });
 
-/* DARK */
-darkToggle.onclick=()=>{
-darkToggle.classList.toggle("active");
-document.body.classList.toggle("light");
-};
+/* ===== MEMORY SYSTEM ===== */
 
-/* FONT SCALE FIXED */
-fontSlider.oninput=e=>{
-const scale=e.target.value/20;
-document.documentElement.style.setProperty("--fontScale",scale);
-};
-
-/* INIT */
+/* LOAD SAVED */
 window.onload=()=>{
 setSpacers();
 apply();
+
+const savedFont=localStorage.getItem("fontSize")||20;
+const savedSpeed=localStorage.getItem("speed")||5;
+const savedTheme=localStorage.getItem("theme");
+
+fontSlider.value=savedFont;
+speed.value=savedSpeed;
+
+document.documentElement.style.setProperty("--fontScale",savedFont/20);
+
+if(savedTheme==="light"){
+document.body.classList.add("light");
+darkToggle.classList.add("active");
+}
+};
+
+/* SAVE FONT */
+fontSlider.oninput=e=>{
+const v=e.target.value;
+document.documentElement.style.setProperty("--fontScale",v/20);
+localStorage.setItem("fontSize",v);
+};
+
+/* SAVE SPEED */
+speed.oninput=e=>{
+localStorage.setItem("speed",e.target.value);
+};
+
+/* SAVE THEME */
+darkToggle.onclick=()=>{
+darkToggle.classList.toggle("active");
+document.body.classList.toggle("light");
+
+localStorage.setItem(
+"theme",
+document.body.classList.contains("light")?"light":"dark"
+);
 };
 </script>
 
 </body>
-</html
+</html>
