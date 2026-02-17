@@ -6,23 +6,23 @@
 <title>શ્રી સર્વમંગલ નામાવલી</title>
 
 <style>
+
+/* ================= AMOLED DIVINE SYSTEM ================= */
+
 :root{
---primary:#FF7A00;
---bg1:#0f0c29;
---bg2:#1a1240;
---bg3:#000;
---glass:rgba(255,255,255,0.06);
---text:white;
+--gold:#f6c453;
+--gold-soft:rgba(246,196,83,.35);
+--neon:rgba(255,180,0,.55);
+--bg:#000000;                 /* TRUE AMOLED */
+--glass:rgba(255,255,255,.04);
+--text:#f5f5f5;
 --headerH:60px;
 --fontScale:1;
 }
 
-/* LIGHT MODE */
 body.light{
---bg1:#f6f7fb;
---bg2:#ffffff;
---bg3:#ffffff;
---glass:rgba(0,0,0,0.05);
+--bg:#f6f7fb;
+--glass:rgba(0,0,0,.05);
 --text:#222;
 }
 
@@ -30,12 +30,25 @@ body{
 margin:0;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
 color:var(--text);
-background:linear-gradient(160deg,var(--bg1),var(--bg2),var(--bg3));
+background:var(--bg);
 overflow:hidden;
-transition:.35s;
 }
 
-/* HEADER */
+/* ================= AMBIENT GLOW LAYERS ================= */
+
+body::before{
+content:"";
+position:fixed;
+inset:-20%;
+background:
+radial-gradient(circle at 20% 30%, rgba(255,180,0,.08), transparent 40%),
+radial-gradient(circle at 80% 70%, rgba(255,180,0,.05), transparent 50%);
+pointer-events:none;
+filter:blur(40px);
+}
+
+/* ================= HEADER ================= */
+
 .header{
 position:fixed;
 top:0;
@@ -45,42 +58,26 @@ height:var(--headerH);
 display:flex;
 align-items:center;
 justify-content:center;
-background:var(--glass);
-backdrop-filter:blur(20px);
+background:rgba(0,0,0,.65);
+backdrop-filter:blur(25px);
+border-bottom:1px solid var(--gold-soft);
 z-index:100;
 }
 
-/* ===== PREMIUM THEME TOGGLE ===== */
+/* ================= PREMIUM TOGGLE ================= */
+
 .theme-toggle{
 position:absolute;
 right:16px;
 top:50%;
 transform:translateY(-50%);
-width:68px;
+width:70px;
 height:32px;
 border-radius:40px;
+background:rgba(255,255,255,.05);
+border:1px solid var(--gold-soft);
 cursor:pointer;
-background:linear-gradient(145deg,
-rgba(255,255,255,.15),
-rgba(255,255,255,.05));
-backdrop-filter:blur(12px);
-border:1px solid rgba(255,255,255,.15);
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 8px;
-box-sizing:border-box;
-transition:.35s ease;
 }
-
-.theme-toggle .sun,
-.theme-toggle .moon{
-font-size:14px;
-opacity:.7;
-}
-
-.theme-toggle .sun{ color:#ffb300; }
-.theme-toggle .moon{ color:#9fa8ff; }
 
 .toggle-knob{
 position:absolute;
@@ -88,28 +85,17 @@ width:26px;
 height:26px;
 border-radius:50%;
 background:white;
-left:3px;
 top:3px;
-box-shadow:
-0 2px 8px rgba(0,0,0,.25),
-0 0 10px rgba(255,180,0,.35);
-transition:.35s cubic-bezier(.4,0,.2,1);
+left:3px;
+box-shadow:0 0 14px var(--neon);
+transition:.35s;
 }
 
-.theme-toggle.active{
-background:linear-gradient(145deg,
-rgba(255,255,255,.35),
-rgba(255,255,255,.15));
-}
+.theme-toggle.active .toggle-knob{ left:38px }
 
-.theme-toggle.active .toggle-knob{
-left:38px;
-box-shadow:
-0 2px 8px rgba(0,0,0,.25),
-0 0 12px rgba(120,150,255,.45);
-}
+/* ================= MAIN ================= */
 
-.main{padding-top:var(--headerH);}
+.main{padding-top:var(--headerH)}
 
 .scroll-area{
 height:75vh;
@@ -123,98 +109,119 @@ position:absolute;
 width:100%;
 }
 
-.spacer{height:0;}
+.spacer{height:0}
+
+/* ================= ENERGY ORB ================= */
 
 .orb{
-width:90px;
-height:90px;
-margin:10px auto 18px auto;
+width:110px;
+height:110px;
+margin:20px auto;
 border-radius:50%;
-background:radial-gradient(circle,#f6c453,#ff7a00);
-box-shadow:0 0 20px rgba(255,150,0,.3);
+background:radial-gradient(circle,var(--gold),#ff9f1a);
+box-shadow:
+0 0 30px var(--neon),
+0 0 70px rgba(255,180,0,.35),
+inset 0 0 20px rgba(255,255,255,.25);
+animation:breath 3s ease-in-out infinite;
 }
 
-/* MANTRA */
+@keyframes breath{
+0%,100%{transform:scale(1)}
+50%{transform:scale(1.08)}
+}
+
+/* ================= MANTRA ================= */
+
 .mantra-card{
-margin:6px 16px;
-padding:12px 14px;
-border-radius:14px;
+margin:8px 18px;
+padding:14px 16px;
+border-radius:16px;
 display:flex;
 align-items:center;
 background:var(--glass);
-font-size:calc(clamp(20px,4.5vw,26px) * var(--fontScale));
-line-height:1.6;
-font-weight:500;
-opacity:.45;
+font-size:calc(clamp(20px,4.5vw,26px)*var(--fontScale));
+opacity:.35;
 transform:scale(.92);
-transition:.25s ease;
+transition:.25s;
+border:1px solid transparent;
 }
 
+/* DIVINE FOCUS HALO */
 .mantra-card.focused{
 opacity:1;
-transform:scale(1.12);
-border:1px solid rgba(255,140,0,.45);
-box-shadow:0 0 18px rgba(255,140,0,.25);
+transform:scale(1.14);
+border:1px solid var(--gold);
+box-shadow:
+0 0 12px var(--neon),
+0 0 40px rgba(255,180,0,.25);
 }
 
 .index{
-min-width:34px;
-height:34px;
+min-width:36px;
+height:36px;
 border-radius:50%;
-background:linear-gradient(135deg,#ff7a00,#f6c453);
+background:linear-gradient(135deg,var(--gold),#ff9f1a);
 display:flex;
 justify-content:center;
 align-items:center;
-margin-right:12px;
-font-size:15px;
+margin-right:14px;
+font-weight:600;
 }
 
-/* PLAY */
+/* ================= PLAY ================= */
+
 .play-main{
 position:fixed;
 bottom:22px;
 left:50%;
 transform:translateX(-50%);
-padding:14px 28px;
+padding:16px 34px;
 border-radius:40px;
-background:linear-gradient(135deg,#ff7a00,#f6c453);
-color:white;
-font-weight:600;
+background:linear-gradient(135deg,var(--gold),#ff9f1a);
+color:black;
+font-weight:700;
 cursor:pointer;
-z-index:50;
+box-shadow:
+0 0 25px var(--neon),
+0 0 60px rgba(255,180,0,.3);
 }
 
-/* SETTINGS */
+/* ================= SETTINGS ================= */
+
 .fab{
 position:fixed;
 bottom:22px;
 right:18px;
-width:52px;
-height:52px;
+width:60px;
+height:60px;
 border-radius:50%;
-background:linear-gradient(135deg,#ff7a00,#f6c453);
+background:linear-gradient(135deg,var(--gold),#ff9f1a);
 display:flex;
 justify-content:center;
 align-items:center;
-font-size:22px;
+font-size:24px;
 cursor:pointer;
-z-index:60;
+box-shadow:
+0 0 25px var(--neon);
 }
 
+/* PANEL */
 .panel{
 position:fixed;
 bottom:-260px;
 left:0;
 right:0;
-padding:22px;
-background:rgba(0,0,0,.6);
-backdrop-filter:blur(35px);
-border-radius:28px 28px 0 0;
-transition:.35s ease;
+padding:26px;
+background:rgba(0,0,0,.85);
+backdrop-filter:blur(40px);
+border-radius:30px 30px 0 0;
+transition:.35s;
 display:flex;
 flex-direction:column;
-gap:18px;
-z-index:200;
+gap:20px;
+border-top:1px solid var(--gold-soft);
+box-shadow:0 -10px 40px rgba(255,180,0,.15);
 }
 .panel.show{bottom:0}
 
@@ -227,8 +234,6 @@ input[type=range]{width:100%}
 <div class="header">
 🛕 શ્રી સર્વમંગલ નામાવલી
 <div class="theme-toggle" id="darkToggle">
-<span class="sun">☀</span>
-<span class="moon">🌙</span>
 <div class="toggle-knob"></div>
 </div>
 </div>
@@ -251,16 +256,6 @@ input[type=range]{width:100%}
 <div class="mantra-card"><div class="index">૮</div><div>ૐ શ્રી દયાળુદેવાય નમઃ</div></div>
 <div class="mantra-card"><div class="index">૯</div><div>ૐ શ્રી પરમાત્મને નમઃ</div></div>
 <div class="mantra-card"><div class="index">૧૦</div><div>ૐ શ્રી અનંતાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૧</div><div>ૐ શ્રી અવિનાશિને નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૨</div><div>ૐ શ્રી પરબ્રહ્મણે નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૩</div><div>ૐ શ્રી કરુણાસાગરાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૪</div><div>ૐ શ્રી દયામૂર્તયે નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૫</div><div>ૐ શ્રી પરમેશ્વરાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૬</div><div>ૐ શ્રી અનાદિદેવાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૭</div><div>ૐ શ્રી પરમાત્મને નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૮</div><div>ૐ શ્રી ભક્તપ્રિયાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૯</div><div>ૐ શ્રી કલ્યાણમૂર્તયે નમઃ</div></div>
-<div class="mantra-card"><div class="index">૨૦</div><div>ૐ શ્રી શાશ્વતાય નમઃ</div></div>
 
 <div class="spacer" id="bottomSpace"></div>
 
@@ -292,21 +287,19 @@ const bottomSpace=document.getElementById("bottomSpace");
 
 let offset=0,playing=false,dragging=false,startY,startOffset;
 
-/* SPACERS */
 function setSpacers(){
 const h=scrollArea.offsetHeight/2;
 topSpace.style.height=h+"px";
 bottomSpace.style.height=h+"px";
 }
 
-/* FOCUS */
 function updateFocus(){
 const center=scrollArea.getBoundingClientRect().top + scrollArea.offsetHeight/2;
 list.querySelectorAll(".mantra-card").forEach(card=>{
 const r=card.getBoundingClientRect();
 const dist=Math.abs(center-(r.top+r.height/2));
 const ratio=Math.min(dist/(scrollArea.offsetHeight/2),1);
-card.style.transform=`scale(${1.12-(ratio*0.20)})`;
+card.style.transform=`scale(${1.14-(ratio*0.20)})`;
 card.style.opacity=1-(ratio*0.65);
 card.classList.toggle("focused",ratio<0.08);
 });
@@ -317,18 +310,11 @@ list.style.transform=`translateY(-${offset}px)`;
 updateFocus();
 }
 
-/* AUTO */
 function animate(){
 if(!playing||dragging) return;
 offset+=speed.value*0.18;
 const max=list.scrollHeight-scrollArea.offsetHeight;
-if(offset>=max){
-offset=max;
-playing=false;
-playBtn.innerText="↻ Restart";
-apply();
-return;
-}
+if(offset>=max){offset=max;playing=false;playBtn.innerText="↻ Restart";apply();return;}
 apply();
 requestAnimationFrame(animate);
 }
@@ -340,23 +326,21 @@ playBtn.innerText=playing?"⏸ Pause":"▶ Start";
 if(playing) animate();
 };
 
-/* DRAG */
 scrollArea.onpointerdown=e=>{
 dragging=true;
 startY=e.clientY;
 startOffset=offset;
 };
 scrollArea.onpointermove=e=>{
-if(!dragging) return;
+if(!dragging)return;
 offset=startOffset-(e.clientY-startY);
 apply();
 };
 scrollArea.onpointerup=()=>{
 dragging=false;
-if(playing) animate();
+if(playing)animate();
 };
 
-/* SETTINGS */
 settingsBtn.onclick=e=>{
 e.stopPropagation();
 panel.classList.toggle("show");
@@ -367,45 +351,18 @@ panel.classList.remove("show");
 }
 });
 
-/* LOAD MEMORY */
 window.onload=()=>{
 setSpacers();
 apply();
-
-const savedFont=localStorage.getItem("fontSize")||20;
-const savedSpeed=localStorage.getItem("speed")||5;
-const savedTheme=localStorage.getItem("theme");
-
-fontSlider.value=savedFont;
-speed.value=savedSpeed;
-document.documentElement.style.setProperty("--fontScale",savedFont/20);
-
-if(savedTheme==="light"){
-document.body.classList.add("light");
-darkToggle.classList.add("active");
-}
 };
 
-/* SAVE FONT */
-fontSlider.oninput=e=>{
-const v=e.target.value;
-document.documentElement.style.setProperty("--fontScale",v/20);
-localStorage.setItem("fontSize",v);
-};
-
-/* SAVE SPEED */
-speed.oninput=e=>{
-localStorage.setItem("speed",e.target.value);
-};
-
-/* SAVE THEME */
 darkToggle.onclick=()=>{
 darkToggle.classList.toggle("active");
 document.body.classList.toggle("light");
-localStorage.setItem(
-"theme",
-document.body.classList.contains("light")?"light":"dark"
-);
+};
+
+fontSlider.oninput=e=>{
+document.documentElement.style.setProperty("--fontScale",e.target.value/20);
 };
 </script>
 
