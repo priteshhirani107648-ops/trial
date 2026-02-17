@@ -2,410 +2,585 @@
 <html lang="gu">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>શ્રી સર્વમંગલ નામાવલી</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
-:root{
---primary:#FF7A00;
---bg1:#0f0c29;
---bg2:#1a1240;
---bg3:#000;
---glass:rgba(255,255,255,0.06);
---text:white;
---headerH:60px;
---fontScale:1;
+:root {
+  --primary: #FF9933; /* Saffron */
+  --primary-dark: #E67A00;
+  --primary-glow: rgba(255, 153, 51, 0.4);
+  
+  /* Dark Theme Colors */
+  --bg1: #1a0b2e;
+  --bg2: #0d0514;
+  --bg3: #000000;
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-border: rgba(255, 255, 255, 0.1);
+  --text-main: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --header-glass: rgba(26, 11, 46, 0.75);
+  
+  --headerH: 70px;
+  --fontScale: 1;
 }
 
-/* LIGHT MODE */
-body.light{
---bg1:#f6f7fb;
---bg2:#ffffff;
---bg3:#ffffff;
---glass:rgba(0,0,0,0.05);
---text:#222;
+/* Light Theme Colors */
+body.light {
+  --bg1: #fffcf9;
+  --bg2: #ffeede;
+  --bg3: #ffdcb8;
+  --surface: rgba(255, 255, 255, 0.7);
+  --surface-border: rgba(255, 153, 51, 0.2);
+  --text-main: #3a1c0d;
+  --text-muted: rgba(58, 28, 13, 0.5);
+  --header-glass: rgba(255, 252, 249, 0.75);
 }
 
-body{
-margin:0;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-color:var(--text);
-background:linear-gradient(160deg,var(--bg1),var(--bg2),var(--bg3));
-overflow:hidden;
-transition:.35s;
+body {
+  margin: 0;
+  font-family: 'Hind Vadodara', 'Poppins', sans-serif;
+  color: var(--text-main);
+  background: linear-gradient(160deg, var(--bg1), var(--bg2), var(--bg3));
+  overflow: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* HEADER */
-.header{
-position:fixed;
-top:0;
-left:0;
-right:0;
-height:var(--headerH);
-display:flex;
-align-items:center;
-justify-content:center;
-background:var(--glass);
-backdrop-filter:blur(20px);
-z-index:100;
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--headerH);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--header-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--surface-border);
+  z-index: 100;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
-/* ===== PREMIUM THEME TOGGLE ===== */
-.theme-toggle{
-position:absolute;
-right:16px;
-top:50%;
-transform:translateY(-50%);
-width:68px;
-height:32px;
-border-radius:40px;
-cursor:pointer;
-background:linear-gradient(145deg,
-rgba(255,255,255,.15),
-rgba(255,255,255,.05));
-backdrop-filter:blur(12px);
-border:1px solid rgba(255,255,255,.15);
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 8px;
-box-sizing:border-box;
-transition:.35s ease;
+/* PREMIUM THEME TOGGLE */
+.theme-toggle {
+  position: absolute;
+  right: 20px;
+  width: 60px;
+  height: 30px;
+  border-radius: 40px;
+  cursor: pointer;
+  background: var(--surface);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--surface-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  box-sizing: border-box;
+  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.theme-toggle .sun,
-.theme-toggle .moon{
-font-size:14px;
-opacity:.7;
+.theme-toggle .sun { color: #ffb300; font-size: 14px; z-index: 2; }
+.theme-toggle .moon { color: #9fa8ff; font-size: 13px; z-index: 2; }
+
+.toggle-knob {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  left: 2px;
+  top: 2px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
 }
 
-.theme-toggle .sun{ color:#ffb300; }
-.theme-toggle .moon{ color:#9fa8ff; }
+.theme-toggle.active { background: rgba(255, 153, 51, 0.2); border-color: var(--primary); }
+.theme-toggle.active .toggle-knob { left: 32px; box-shadow: 0 2px 8px rgba(255,153,51,0.4); }
 
-.toggle-knob{
-position:absolute;
-width:26px;
-height:26px;
-border-radius:50%;
-background:white;
-left:3px;
-top:3px;
-box-shadow:
-0 2px 8px rgba(0,0,0,.25),
-0 0 10px rgba(255,180,0,.35);
-transition:.35s cubic-bezier(.4,0,.2,1);
+/* MAIN CONTENT */
+.main { padding-top: var(--headerH); }
+
+.scroll-area {
+  height: calc(100vh - var(--headerH));
+  overflow: hidden;
+  position: relative;
+  touch-action: none;
+  mask-image: linear-gradient(to bottom, transparent, black 15%, black 80%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 80%, transparent);
 }
 
-.theme-toggle.active{
-background:linear-gradient(145deg,
-rgba(255,255,255,.35),
-rgba(255,255,255,.15));
+.mantra-list { position: absolute; width: 100%; }
+.spacer { height: 0; }
+
+/* ORB ANIMATION */
+@keyframes pulse {
+  0% { box-shadow: 0 0 20px var(--primary-glow), 0 0 0 0 rgba(255, 153, 51, 0.2); transform: scale(1); }
+  50% { box-shadow: 0 0 40px var(--primary-glow), 0 0 0 20px rgba(255, 153, 51, 0); transform: scale(1.05); }
+  100% { box-shadow: 0 0 20px var(--primary-glow), 0 0 0 0 rgba(255, 153, 51, 0); transform: scale(1); }
 }
 
-.theme-toggle.active .toggle-knob{
-left:38px;
-box-shadow:
-0 2px 8px rgba(0,0,0,.25),
-0 0 12px rgba(120,150,255,.45);
+.orb {
+  width: 80px;
+  height: 80px;
+  margin: 20px auto 40px auto;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffd480, var(--primary));
+  box-shadow: 0 0 20px var(--primary-glow);
+  animation: pulse 3s infinite ease-in-out;
 }
 
-.main{padding-top:var(--headerH);}
-
-.scroll-area{
-height:75vh;
-overflow:hidden;
-position:relative;
-touch-action:none;
+/* MANTRA CARDS */
+.mantra-card {
+  margin: 10px 20px;
+  padding: 14px 20px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid transparent;
+  font-size: calc(clamp(20px, 4.5vw, 28px) * var(--fontScale));
+  font-weight: 500;
+  opacity: 0.3;
+  transform: scale(0.9);
+  transition: all 0.3s ease-out;
+  will-change: transform, opacity;
 }
 
-.mantra-list{
-position:absolute;
-width:100%;
+.mantra-card.focused {
+  opacity: 1;
+  transform: scale(1.08);
+  background: var(--surface);
+  border: 1px solid var(--primary-glow);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 0 20px rgba(255, 153, 51, 0.05);
+  color: var(--primary);
+  font-weight: 600;
 }
 
-.spacer{height:0;}
-
-.orb{
-width:90px;
-height:90px;
-margin:10px auto 18px auto;
-border-radius:50%;
-background:radial-gradient(circle,#f6c453,#ff7a00);
-box-shadow:0 0 20px rgba(255,150,0,.3);
+.index {
+  min-width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 16px;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  box-shadow: 0 4px 10px var(--primary-glow);
 }
 
-/* MANTRA */
-.mantra-card{
-margin:6px 16px;
-padding:12px 14px;
-border-radius:14px;
-display:flex;
-align-items:center;
-background:var(--glass);
-font-size:calc(clamp(20px,4.5vw,26px) * var(--fontScale));
-line-height:1.6;
-font-weight:500;
-opacity:.45;
-transform:scale(.92);
-transition:.25s ease;
+/* BOTTOM CONTROLS */
+.controls-wrapper {
+  position: fixed;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  gap: 20px;
+  pointer-events: none; /* Let clicks pass through empty space */
 }
 
-.mantra-card.focused{
-opacity:1;
-transform:scale(1.12);
-border:1px solid rgba(255,140,0,.45);
-box-shadow:0 0 18px rgba(255,140,0,.25);
+.play-main {
+  pointer-events: auto;
+  padding: 16px 36px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px var(--primary-glow);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: 0.2s;
 }
 
-.index{
-min-width:34px;
-height:34px;
-border-radius:50%;
-background:linear-gradient(135deg,#ff7a00,#f6c453);
-display:flex;
-justify-content:center;
-align-items:center;
-margin-right:12px;
-font-size:15px;
+.play-main:active { transform: scale(0.95); }
+
+.fab {
+  pointer-events: auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--surface-border);
+  color: var(--text-main);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  transition: 0.2s;
+}
+.fab:active { transform: scale(0.95); }
+
+/* SETTINGS PANEL */
+.panel {
+  position: fixed;
+  bottom: -350px;
+  left: 0;
+  right: 0;
+  padding: 30px 24px 40px 24px;
+  background: var(--header-glass);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-top: 1px solid var(--surface-border);
+  border-radius: 32px 32px 0 0;
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy effect */
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  z-index: 200;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
 }
 
-/* PLAY */
-.play-main{
-position:fixed;
-bottom:22px;
-left:50%;
-transform:translateX(-50%);
-padding:14px 28px;
-border-radius:40px;
-background:linear-gradient(135deg,#ff7a00,#f6c453);
-color:white;
-font-weight:600;
-cursor:pointer;
-z-index:50;
+.panel.show { bottom: 0; }
+
+.panel-header {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text-main);
+  position: relative;
 }
 
-/* SETTINGS */
-.fab{
-position:fixed;
-bottom:22px;
-right:18px;
-width:52px;
-height:52px;
-border-radius:50%;
-background:linear-gradient(135deg,#ff7a00,#f6c453);
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:22px;
-cursor:pointer;
-z-index:60;
+.panel-header::after {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 5px;
+  background: var(--surface-border);
+  border-radius: 10px;
 }
 
-.panel{
-position:fixed;
-bottom:-260px;
-left:0;
-right:0;
-padding:22px;
-background:rgba(0,0,0,.6);
-backdrop-filter:blur(35px);
-border-radius:28px 28px 0 0;
-transition:.35s ease;
-display:flex;
-flex-direction:column;
-gap:18px;
-z-index:200;
+.setting-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.panel.show{bottom:0}
 
-input[type=range]{width:100%}
+.setting-group label {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* CUSTOM SLIDERS */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+input[type=range]:focus { outline: none; }
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: var(--surface-border);
+  border-radius: 10px;
+}
+input[type=range]::-webkit-slider-thumb {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -8px;
+  box-shadow: 0 2px 10px var(--primary-glow);
+  border: 2px solid white;
+}
 </style>
 </head>
 
 <body>
 
 <div class="header">
-🛕 શ્રી સર્વમંગલ નામાવલી
-<div class="theme-toggle" id="darkToggle">
-<span class="sun">☀</span>
-<span class="moon">🌙</span>
-<div class="toggle-knob"></div>
-</div>
+  <span style="margin-right: 8px;">🛕</span> શ્રી સર્વમંગલ નામાવલી
+  <div class="theme-toggle" id="darkToggle">
+    <span class="sun">☀</span>
+    <span class="moon">🌙</span>
+    <div class="toggle-knob"></div>
+  </div>
 </div>
 
 <div class="main">
-<div class="scroll-area" id="scrollArea">
-<div class="mantra-list" id="list">
+  <div class="scroll-area" id="scrollArea">
+    <div class="mantra-list" id="list">
+      
+      <div class="spacer" id="topSpace"></div>
+      <div class="orb"></div>
 
-<div class="spacer" id="topSpace"></div>
-<div class="orb"></div>
+      <div class="mantra-card"><div class="index">૧</div><div>ૐ શ્રી સર્વમંગલાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૨</div><div>ૐ શ્રી સદ્રૂપાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૩</div><div>ૐ શ્રી સત્કૃતાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૪</div><div>ૐ શ્રી શાંતાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૫</div><div>ૐ શ્રી દિવ્યમંગલાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૬</div><div>ૐ શ્રી કરુણામયાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૭</div><div>ૐ શ્રી ભક્તવત્સલાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૮</div><div>ૐ શ્રી દયાળુદેવાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૯</div><div>ૐ શ્રી પરમાત્મને નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૧૦</div><div>ૐ શ્રી અનંતાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૧૧</div><div>ૐ શ્રી અવિનાશિને નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૧૨</div><div>ૐ શ્રી પરબ્રહ્મણે નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૧૩</div><div>ૐ શ્રી કરુણાસાગરાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૧૪</div><div>ૐ શ્રી દયામૂર્તયે નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૧૫</div><div>ૐ શ્રી પરમેશ્વરાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૧૬</div><div>ૐ શ્રી અનાદિદેવાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૧૭</div><div>ૐ શ્રી પરમાત્મને નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૧૮</div><div>ૐ શ્રી ભક્તપ્રિયાય નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૧૯</div><div>ૐ શ્રી કલ્યાણમૂર્તયે નમઃ</div></div>
+      <div class="mantra-card"><div class="index">૨૦</div><div>ૐ શ્રી શાશ્વતાય નમઃ</div></div>
 
-<!-- 20 MANTRAS -->
-<div class="mantra-card"><div class="index">૧</div><div>ૐ શ્રી સર્વમંગલાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૨</div><div>ૐ શ્રી સદ્રૂપાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૩</div><div>ૐ શ્રી સત્કૃતાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૪</div><div>ૐ શ્રી શાંતાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૫</div><div>ૐ શ્રી દિવ્યમંગલાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૬</div><div>ૐ શ્રી કરુણામયાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૭</div><div>ૐ શ્રી ભક્તવત્સલાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૮</div><div>ૐ શ્રી દયાળુદેવાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૯</div><div>ૐ શ્રી પરમાત્મને નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૦</div><div>ૐ શ્રી અનંતાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૧</div><div>ૐ શ્રી અવિનાશિને નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૨</div><div>ૐ શ્રી પરબ્રહ્મણે નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૩</div><div>ૐ શ્રી કરુણાસાગરાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૪</div><div>ૐ શ્રી દયામૂર્તયે નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૫</div><div>ૐ શ્રી પરમેશ્વરાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૬</div><div>ૐ શ્રી અનાદિદેવાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૭</div><div>ૐ શ્રી પરમાત્મને નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૮</div><div>ૐ શ્રી ભક્તપ્રિયાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૯</div><div>ૐ શ્રી કલ્યાણમૂર્તયે નમઃ</div></div>
-<div class="mantra-card"><div class="index">૨૦</div><div>ૐ શ્રી શાશ્વતાય નમઃ</div></div>
-
-<div class="spacer" id="bottomSpace"></div>
-
-</div>
-</div>
+      <div class="spacer" id="bottomSpace"></div>
+    </div>
+  </div>
 </div>
 
-<div class="play-main" id="playBtn">▶ Start</div>
-<div class="fab" id="settingsBtn">⚙</div>
+<div class="controls-wrapper">
+  <div class="play-main" id="playBtn">
+    <span id="playIcon">▶</span> <span id="playText">Start</span>
+  </div>
+  <div class="fab" id="settingsBtn">⚙️</div>
+</div>
 
 <div class="panel" id="panel">
-<label>Font Size</label>
-<input type="range" id="fontSlider" min="12" max="40">
-<label>Flow Speed</label>
-<input type="range" id="speed" min="1" max="10">
+  <div class="panel-header">Settings</div>
+  
+  <div class="setting-group">
+    <label><span>Font Size</span> <span id="fontVal">Medium</span></label>
+    <input type="range" id="fontSlider" min="14" max="36" value="24">
+  </div>
+  
+  <div class="setting-group">
+    <label><span>Flow Speed</span> <span id="speedVal">Normal</span></label>
+    <input type="range" id="speed" min="1" max="10" value="5">
+  </div>
 </div>
 
 <script>
-const scrollArea=document.getElementById("scrollArea");
-const list=document.getElementById("list");
-const playBtn=document.getElementById("playBtn");
-const speed=document.getElementById("speed");
-const fontSlider=document.getElementById("fontSlider");
-const darkToggle=document.getElementById("darkToggle");
-const panel=document.getElementById("panel");
-const settingsBtn=document.getElementById("settingsBtn");
-const topSpace=document.getElementById("topSpace");
-const bottomSpace=document.getElementById("bottomSpace");
+const scrollArea = document.getElementById("scrollArea");
+const list = document.getElementById("list");
+const playBtn = document.getElementById("playBtn");
+const playIcon = document.getElementById("playIcon");
+const playText = document.getElementById("playText");
+const speed = document.getElementById("speed");
+const fontSlider = document.getElementById("fontSlider");
+const darkToggle = document.getElementById("darkToggle");
+const panel = document.getElementById("panel");
+const settingsBtn = document.getElementById("settingsBtn");
+const topSpace = document.getElementById("topSpace");
+const bottomSpace = document.getElementById("bottomSpace");
 
-let offset=0,playing=false,dragging=false,startY,startOffset;
+let offset = 0, playing = false, dragging = false, startY, startOffset;
+let animationFrameId;
 
 /* SPACERS */
-function setSpacers(){
-const h=scrollArea.offsetHeight/2;
-topSpace.style.height=h+"px";
-bottomSpace.style.height=h+"px";
+function setSpacers() {
+  const h = scrollArea.offsetHeight / 2;
+  topSpace.style.height = (h - 60) + "px"; // Offset slightly for aesthetics
+  bottomSpace.style.height = h + "px";
 }
 
-/* FOCUS */
-function updateFocus(){
-const center=scrollArea.getBoundingClientRect().top + scrollArea.offsetHeight/2;
-list.querySelectorAll(".mantra-card").forEach(card=>{
-const r=card.getBoundingClientRect();
-const dist=Math.abs(center-(r.top+r.height/2));
-const ratio=Math.min(dist/(scrollArea.offsetHeight/2),1);
-card.style.transform=`scale(${1.12-(ratio*0.20)})`;
-card.style.opacity=1-(ratio*0.65);
-card.classList.toggle("focused",ratio<0.08);
+/* FOCUS MATH */
+function updateFocus() {
+  const center = scrollArea.offsetHeight / 2;
+  
+  list.querySelectorAll(".mantra-card").forEach(card => {
+    // Calculate position relative to the scroll container
+    const cardCenter = card.offsetTop + (card.offsetHeight / 2) - offset;
+    const dist = Math.abs(center - cardCenter);
+    
+    // Create a smooth scale and opacity ratio based on distance from center
+    const maxDist = scrollArea.offsetHeight / 2;
+    const ratio = Math.max(0, 1 - (dist / maxDist));
+    
+    card.style.transform = `scale(${0.9 + (ratio * 0.18)})`;
+    card.style.opacity = 0.3 + (ratio * 0.7);
+    
+    // Toggle active glow class
+    if(ratio > 0.85) {
+      card.classList.add("focused");
+    } else {
+      card.classList.remove("focused");
+    }
+  });
+}
+
+function apply() {
+  list.style.transform = `translateY(-${offset}px)`;
+  updateFocus();
+}
+
+/* AUTO ANIMATION */
+function animate() {
+  if(!playing || dragging) return;
+  
+  // Speed multiplier
+  offset += speed.value * 0.25; 
+  
+  const max = list.scrollHeight - scrollArea.offsetHeight;
+  if(offset >= max) {
+    offset = max;
+    playing = false;
+    playIcon.innerText = "↻";
+    playText.innerText = "Restart";
+    apply();
+    return;
+  }
+  
+  apply();
+  animationFrameId = requestAnimationFrame(animate);
+}
+
+playBtn.onclick = () => {
+  if(!playing && playText.innerText === "Restart") {
+    offset = 0;
+  }
+  
+  playing = !playing;
+  
+  if(playing) {
+    playIcon.innerText = "⏸";
+    playText.innerText = "Pause";
+    animate();
+  } else {
+    playIcon.innerText = "▶";
+    playText.innerText = "Resume";
+    cancelAnimationFrame(animationFrameId);
+  }
+};
+
+/* DRAG TO SCROLL */
+scrollArea.addEventListener('pointerdown', e => {
+  dragging = true;
+  startY = e.clientY;
+  startOffset = offset;
+  scrollArea.style.cursor = 'grabbing';
 });
-}
 
-function apply(){
-list.style.transform=`translateY(-${offset}px)`;
-updateFocus();
-}
-
-/* AUTO */
-function animate(){
-if(!playing||dragging) return;
-offset+=speed.value*0.18;
-const max=list.scrollHeight-scrollArea.offsetHeight;
-if(offset>=max){
-offset=max;
-playing=false;
-playBtn.innerText="↻ Restart";
-apply();
-return;
-}
-apply();
-requestAnimationFrame(animate);
-}
-
-playBtn.onclick=()=>{
-if(!playing && playBtn.innerText==="↻ Restart") offset=0;
-playing=!playing;
-playBtn.innerText=playing?"⏸ Pause":"▶ Start";
-if(playing) animate();
-};
-
-/* DRAG */
-scrollArea.onpointerdown=e=>{
-dragging=true;
-startY=e.clientY;
-startOffset=offset;
-};
-scrollArea.onpointermove=e=>{
-if(!dragging) return;
-offset=startOffset-(e.clientY-startY);
-apply();
-};
-scrollArea.onpointerup=()=>{
-dragging=false;
-if(playing) animate();
-};
-
-/* SETTINGS */
-settingsBtn.onclick=e=>{
-e.stopPropagation();
-panel.classList.toggle("show");
-};
-document.addEventListener("click",e=>{
-if(!panel.contains(e.target)&&!settingsBtn.contains(e.target)){
-panel.classList.remove("show");
-}
+window.addEventListener('pointermove', e => {
+  if(!dragging) return;
+  
+  const deltaY = e.clientY - startY;
+  offset = startOffset - deltaY;
+  
+  // Clamp scrolling
+  const max = list.scrollHeight - scrollArea.offsetHeight;
+  if(offset < 0) offset = 0;
+  if(offset > max) offset = max;
+  
+  apply();
 });
 
-/* LOAD MEMORY */
-window.onload=()=>{
-setSpacers();
-apply();
+window.addEventListener('pointerup', () => {
+  if(dragging) {
+    dragging = false;
+    scrollArea.style.cursor = 'default';
+    if(playing) animate(); // Resume if it was playing
+  }
+});
 
-const savedFont=localStorage.getItem("fontSize")||20;
-const savedSpeed=localStorage.getItem("speed")||5;
-const savedTheme=localStorage.getItem("theme");
+/* SETTINGS PANEL LOGIC */
+settingsBtn.onclick = e => {
+  e.stopPropagation();
+  panel.classList.toggle("show");
+};
 
-fontSlider.value=savedFont;
-speed.value=savedSpeed;
-document.documentElement.style.setProperty("--fontScale",savedFont/20);
+document.addEventListener("click", e => {
+  if(!panel.contains(e.target) && !settingsBtn.contains(e.target)){
+    panel.classList.remove("show");
+  }
+});
 
-if(savedTheme==="light"){
-document.body.classList.add("light");
-darkToggle.classList.add("active");
+/* UPDATE LABELS */
+function updateLabels() {
+  const fVal = fontSlider.value;
+  document.getElementById('fontVal').innerText = fVal < 18 ? 'Small' : fVal > 28 ? 'Large' : 'Medium';
+  
+  const sVal = speed.value;
+  document.getElementById('speedVal').innerText = sVal < 4 ? 'Slow' : sVal > 7 ? 'Fast' : 'Normal';
 }
+
+/* LOCAL STORAGE & INIT */
+window.onload = () => {
+  setSpacers();
+  
+  const savedFont = localStorage.getItem("fontSize") || 24;
+  const savedSpeed = localStorage.getItem("speed") || 5;
+  const savedTheme = localStorage.getItem("theme");
+  
+  fontSlider.value = savedFont;
+  speed.value = savedSpeed;
+  document.documentElement.style.setProperty("--fontScale", savedFont / 24);
+  
+  if(savedTheme === "light") {
+    document.body.classList.add("light");
+    darkToggle.classList.add("active");
+  }
+  
+  updateLabels();
+  apply(); // Initial render
 };
 
-/* SAVE FONT */
-fontSlider.oninput=e=>{
-const v=e.target.value;
-document.documentElement.style.setProperty("--fontScale",v/20);
-localStorage.setItem("fontSize",v);
+/* HANDLE RESIZE */
+window.onresize = () => {
+  setSpacers();
+  apply();
 };
 
-/* SAVE SPEED */
-speed.oninput=e=>{
-localStorage.setItem("speed",e.target.value);
+/* EVENT LISTENERS FOR SLIDERS */
+fontSlider.oninput = e => {
+  const v = e.target.value;
+  document.documentElement.style.setProperty("--fontScale", v / 24);
+  localStorage.setItem("fontSize", v);
+  updateLabels();
+  setTimeout(apply, 50); // Small delay to let DOM update heights
 };
 
-/* SAVE THEME */
-darkToggle.onclick=()=>{
-darkToggle.classList.toggle("active");
-document.body.classList.toggle("light");
-localStorage.setItem(
-"theme",
-document.body.classList.contains("light")?"light":"dark"
-);
+speed.oninput = e => {
+  localStorage.setItem("speed", e.target.value);
+  updateLabels();
+};
+
+/* THEME TOGGLE */
+darkToggle.onclick = () => {
+  darkToggle.classList.toggle("active");
+  document.body.classList.toggle("light");
+  localStorage.setItem(
+    "theme",
+    document.body.classList.contains("light") ? "light" : "dark"
+  );
 };
 </script>
 
