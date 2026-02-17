@@ -8,7 +8,6 @@
 <style>
 :root{
 --primary:#FF7A00;
---gold:#f6c453;
 --bg1:#0f0c29;
 --bg2:#1a1240;
 --bg3:#000;
@@ -49,10 +48,9 @@ justify-content:center;
 background:var(--glass);
 backdrop-filter:blur(20px);
 z-index:100;
-font-size:15px;
 }
 
-/* PREMIUM THEME TOGGLE */
+/* ===== PREMIUM THEME TOGGLE ===== */
 .theme-toggle{
 position:absolute;
 right:16px;
@@ -71,7 +69,18 @@ display:flex;
 align-items:center;
 justify-content:space-between;
 padding:0 8px;
+box-sizing:border-box;
+transition:.35s ease;
 }
+
+.theme-toggle .sun,
+.theme-toggle .moon{
+font-size:14px;
+opacity:.7;
+}
+
+.theme-toggle .sun{ color:#ffb300; }
+.theme-toggle .moon{ color:#9fa8ff; }
 
 .toggle-knob{
 position:absolute;
@@ -81,15 +90,25 @@ border-radius:50%;
 background:white;
 left:3px;
 top:3px;
-box-shadow:0 0 10px rgba(255,180,0,.35);
-transition:.35s;
+box-shadow:
+0 2px 8px rgba(0,0,0,.25),
+0 0 10px rgba(255,180,0,.35);
+transition:.35s cubic-bezier(.4,0,.2,1);
+}
+
+.theme-toggle.active{
+background:linear-gradient(145deg,
+rgba(255,255,255,.35),
+rgba(255,255,255,.15));
 }
 
 .theme-toggle.active .toggle-knob{
 left:38px;
+box-shadow:
+0 2px 8px rgba(0,0,0,.25),
+0 0 12px rgba(120,150,255,.45);
 }
 
-/* MAIN */
 .main{padding-top:var(--headerH);}
 
 .scroll-area{
@@ -104,16 +123,15 @@ position:absolute;
 width:100%;
 }
 
-.spacer{height:0}
+.spacer{height:0;}
 
-/* ORB */
 .orb{
 width:90px;
 height:90px;
 margin:10px auto 18px auto;
 border-radius:50%;
-background:radial-gradient(circle,var(--gold),var(--primary));
-box-shadow:0 0 25px rgba(255,180,0,.35);
+background:radial-gradient(circle,#f6c453,#ff7a00);
+box-shadow:0 0 20px rgba(255,150,0,.3);
 }
 
 /* MANTRA */
@@ -129,7 +147,7 @@ line-height:1.6;
 font-weight:500;
 opacity:.45;
 transform:scale(.92);
-transition:.25s;
+transition:.25s ease;
 }
 
 .mantra-card.focused{
@@ -143,7 +161,7 @@ box-shadow:0 0 18px rgba(255,140,0,.25);
 min-width:34px;
 height:34px;
 border-radius:50%;
-background:linear-gradient(135deg,var(--primary),var(--gold));
+background:linear-gradient(135deg,#ff7a00,#f6c453);
 display:flex;
 justify-content:center;
 align-items:center;
@@ -159,7 +177,7 @@ left:50%;
 transform:translateX(-50%);
 padding:14px 28px;
 border-radius:40px;
-background:linear-gradient(135deg,var(--primary),var(--gold));
+background:linear-gradient(135deg,#ff7a00,#f6c453);
 color:white;
 font-weight:600;
 cursor:pointer;
@@ -174,7 +192,7 @@ right:18px;
 width:52px;
 height:52px;
 border-radius:50%;
-background:linear-gradient(135deg,var(--primary),var(--gold));
+background:linear-gradient(135deg,#ff7a00,#f6c453);
 display:flex;
 justify-content:center;
 align-items:center;
@@ -192,7 +210,7 @@ padding:22px;
 background:rgba(0,0,0,.6);
 backdrop-filter:blur(35px);
 border-radius:28px 28px 0 0;
-transition:.35s;
+transition:.35s ease;
 display:flex;
 flex-direction:column;
 gap:18px;
@@ -209,6 +227,8 @@ input[type=range]{width:100%}
 <div class="header">
 🛕 શ્રી સર્વમંગલ નામાવલી
 <div class="theme-toggle" id="darkToggle">
+<span class="sun">☀</span>
+<span class="moon">🌙</span>
 <div class="toggle-knob"></div>
 </div>
 </div>
@@ -272,12 +292,14 @@ const bottomSpace=document.getElementById("bottomSpace");
 
 let offset=0,playing=false,dragging=false,startY,startOffset;
 
+/* SPACERS */
 function setSpacers(){
 const h=scrollArea.offsetHeight/2;
 topSpace.style.height=h+"px";
 bottomSpace.style.height=h+"px";
 }
 
+/* FOCUS */
 function updateFocus(){
 const center=scrollArea.getBoundingClientRect().top + scrollArea.offsetHeight/2;
 list.querySelectorAll(".mantra-card").forEach(card=>{
@@ -295,6 +317,7 @@ list.style.transform=`translateY(-${offset}px)`;
 updateFocus();
 }
 
+/* AUTO */
 function animate(){
 if(!playing||dragging) return;
 offset+=speed.value*0.18;
@@ -317,21 +340,23 @@ playBtn.innerText=playing?"⏸ Pause":"▶ Start";
 if(playing) animate();
 };
 
+/* DRAG */
 scrollArea.onpointerdown=e=>{
 dragging=true;
 startY=e.clientY;
 startOffset=offset;
 };
 scrollArea.onpointermove=e=>{
-if(!dragging)return;
+if(!dragging) return;
 offset=startOffset-(e.clientY-startY);
 apply();
 };
 scrollArea.onpointerup=()=>{
 dragging=false;
-if(playing)animate();
+if(playing) animate();
 };
 
+/* SETTINGS */
 settingsBtn.onclick=e=>{
 e.stopPropagation();
 panel.classList.toggle("show");
@@ -342,6 +367,7 @@ panel.classList.remove("show");
 }
 });
 
+/* LOAD MEMORY */
 window.onload=()=>{
 setSpacers();
 apply();
@@ -360,21 +386,26 @@ darkToggle.classList.add("active");
 }
 };
 
+/* SAVE FONT */
 fontSlider.oninput=e=>{
 const v=e.target.value;
 document.documentElement.style.setProperty("--fontScale",v/20);
 localStorage.setItem("fontSize",v);
 };
 
+/* SAVE SPEED */
 speed.oninput=e=>{
 localStorage.setItem("speed",e.target.value);
 };
 
+/* SAVE THEME */
 darkToggle.onclick=()=>{
 darkToggle.classList.toggle("active");
 document.body.classList.toggle("light");
-localStorage.setItem("theme",
-document.body.classList.contains("light")?"light":"dark");
+localStorage.setItem(
+"theme",
+document.body.classList.contains("light")?"light":"dark"
+);
 };
 </script>
 
