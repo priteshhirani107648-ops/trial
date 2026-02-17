@@ -6,36 +6,66 @@
 <title>શ્રી સર્વમંગલ નામાવલી</title>
 
 <style>
+/* ================= DIVINE COLOR SYSTEM ================= */
+
 :root{
---primary:#FF7A00;
---bg1:#0f0c29;
---bg2:#1a1240;
---bg3:#000;
---glass:rgba(255,255,255,0.06);
---text:white;
+--gold:#f6c453;
+--gold-deep:#ff9f1a;
+--aura:rgba(255,200,80,.35);
+
+--bg1:#05040d;
+--bg2:#0b0820;
+--bg3:#02010a;
+
+--glass:rgba(255,255,255,.05);
+--text:#fdfdfd;
 --headerH:60px;
 --fontScale:1;
 }
 
 /* LIGHT MODE */
 body.light{
---bg1:#f6f7fb;
+--bg1:#faf8f2;
 --bg2:#ffffff;
 --bg3:#ffffff;
---glass:rgba(0,0,0,0.05);
+--glass:rgba(0,0,0,.05);
 --text:#222;
 }
+
+/* ================= BODY ================= */
 
 body{
 margin:0;
 font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
 color:var(--text);
-background:linear-gradient(160deg,var(--bg1),var(--bg2),var(--bg3));
+background:
+radial-gradient(circle at 20% 10%, rgba(255,200,80,.08), transparent 40%),
+radial-gradient(circle at 80% 90%, rgba(255,200,80,.05), transparent 50%),
+linear-gradient(160deg,var(--bg1),var(--bg2),var(--bg3));
 overflow:hidden;
-transition:.35s;
 }
 
-/* HEADER */
+/* ================= FLOATING DIVINE PARTICLES ================= */
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 30% 40%, rgba(255,220,120,.08), transparent 20%),
+radial-gradient(circle at 70% 20%, rgba(255,220,120,.06), transparent 25%),
+radial-gradient(circle at 50% 80%, rgba(255,220,120,.05), transparent 25%);
+pointer-events:none;
+animation:floatAura 12s linear infinite alternate;
+}
+
+@keyframes floatAura{
+from{transform:translateY(0)}
+to{transform:translateY(-30px)}
+}
+
+/* ================= HEADER ================= */
+
 .header{
 position:fixed;
 top:0;
@@ -45,37 +75,50 @@ height:var(--headerH);
 display:flex;
 align-items:center;
 justify-content:center;
-background:var(--glass);
-backdrop-filter:blur(20px);
+backdrop-filter:blur(25px);
+background:rgba(0,0,0,.35);
+border-bottom:1px solid rgba(255,200,80,.15);
 z-index:100;
 }
 
-.dark-toggle{
+/* ================= PREMIUM THEME TOGGLE ================= */
+
+.theme-toggle{
 position:absolute;
 right:16px;
 top:50%;
 transform:translateY(-50%);
-width:46px;
-height:26px;
-border-radius:30px;
-background:#777;
+width:70px;
+height:32px;
+border-radius:40px;
 cursor:pointer;
+background:rgba(255,255,255,.1);
+border:1px solid rgba(255,200,80,.3);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 8px;
 }
-.dark-toggle::after{
-content:"";
-position:absolute;
-width:20px;
-height:20px;
-background:white;
-border-radius:50%;
-top:3px;
-left:3px;
-transition:.3s;
-}
-.dark-toggle.active{background:#ff7a00;}
-.dark-toggle.active::after{left:23px;}
 
-.main{padding-top:var(--headerH);}
+.toggle-knob{
+position:absolute;
+width:26px;
+height:26px;
+border-radius:50%;
+background:white;
+left:3px;
+top:3px;
+box-shadow:0 0 14px var(--gold);
+transition:.35s;
+}
+
+.theme-toggle.active .toggle-knob{
+left:38px;
+}
+
+/* ================= MAIN ================= */
+
+.main{padding-top:var(--headerH)}
 
 .scroll-area{
 height:75vh;
@@ -89,84 +132,97 @@ position:absolute;
 width:100%;
 }
 
-.spacer{height:0;}
+.spacer{height:0}
+
+/* ================= DIVINE ORB ================= */
 
 .orb{
-width:90px;
-height:90px;
-margin:10px auto 18px auto;
+width:100px;
+height:100px;
+margin:20px auto;
 border-radius:50%;
-background:radial-gradient(circle,#f6c453,#ff7a00);
-box-shadow:0 0 20px rgba(255,150,0,.3);
+background:radial-gradient(circle,var(--gold),var(--gold-deep));
+box-shadow:
+0 0 25px var(--aura),
+0 0 60px rgba(255,200,80,.25),
+inset 0 0 20px rgba(255,255,255,.25);
+animation:pulse 3s ease-in-out infinite;
 }
 
-/* MANTRA */
+@keyframes pulse{
+0%,100%{transform:scale(1)}
+50%{transform:scale(1.08)}
+}
+
+/* ================= MANTRA ================= */
+
 .mantra-card{
 margin:6px 16px;
 padding:12px 14px;
-border-radius:14px;
+border-radius:16px;
 display:flex;
 align-items:center;
 background:var(--glass);
-
-font-size:calc(clamp(20px,4.5vw,26px) * var(--fontScale));
-line-height:1.6;
-font-weight:500;
-
+font-size:calc(clamp(20px,4.5vw,26px)*var(--fontScale));
 opacity:.45;
 transform:scale(.92);
-transition:.25s ease;
+transition:.25s;
 }
 
+/* DIVINE FOCUS */
 .mantra-card.focused{
 opacity:1;
-transform:scale(1.12);
-border:1px solid rgba(255,140,0,.45);
-box-shadow:0 0 18px rgba(255,140,0,.25);
+transform:scale(1.14);
+border:1px solid rgba(255,200,80,.5);
+box-shadow:
+0 0 12px rgba(255,200,80,.4),
+0 0 40px rgba(255,200,80,.15);
 }
 
 .index{
 min-width:34px;
 height:34px;
 border-radius:50%;
-background:linear-gradient(135deg,#ff7a00,#f6c453);
+background:linear-gradient(135deg,var(--gold),var(--gold-deep));
 display:flex;
 justify-content:center;
 align-items:center;
 margin-right:12px;
-font-size:15px;
+font-weight:600;
 }
 
-/* PLAY */
+/* ================= PLAY BUTTON ================= */
+
 .play-main{
 position:fixed;
 bottom:22px;
 left:50%;
 transform:translateX(-50%);
-padding:14px 28px;
+padding:14px 30px;
 border-radius:40px;
-background:linear-gradient(135deg,#ff7a00,#f6c453);
-color:white;
-font-weight:600;
+background:linear-gradient(135deg,var(--gold),var(--gold-deep));
+color:black;
+font-weight:700;
 cursor:pointer;
-z-index:50;
+box-shadow:
+0 0 25px rgba(255,200,80,.35);
 }
 
-/* SETTINGS */
+/* ================= SETTINGS ================= */
+
 .fab{
 position:fixed;
 bottom:22px;
 right:18px;
-width:52px;
-height:52px;
+width:56px;
+height:56px;
 border-radius:50%;
-background:linear-gradient(135deg,#ff7a00,#f6c453);
+background:linear-gradient(135deg,var(--gold),var(--gold-deep));
 display:flex;
 justify-content:center;
 align-items:center;
 font-size:22px;
 cursor:pointer;
-z-index:60;
 }
 
 .panel{
@@ -174,15 +230,15 @@ position:fixed;
 bottom:-260px;
 left:0;
 right:0;
-padding:22px;
-background:rgba(0,0,0,.6);
+padding:24px;
+background:rgba(0,0,0,.75);
 backdrop-filter:blur(35px);
-border-radius:28px 28px 0 0;
-transition:.35s ease;
+border-radius:30px 30px 0 0;
+transition:.35s;
 display:flex;
 flex-direction:column;
 gap:18px;
-z-index:200;
+border-top:1px solid rgba(255,200,80,.25);
 }
 .panel.show{bottom:0}
 
@@ -194,7 +250,9 @@ input[type=range]{width:100%}
 
 <div class="header">
 🛕 શ્રી સર્વમંગલ નામાવલી
-<div class="dark-toggle" id="darkToggle"></div>
+<div class="theme-toggle" id="darkToggle">
+<div class="toggle-knob"></div>
+</div>
 </div>
 
 <div class="main">
@@ -204,7 +262,7 @@ input[type=range]{width:100%}
 <div class="spacer" id="topSpace"></div>
 <div class="orb"></div>
 
-<!-- 20 MANTRAS -->
+<!-- SAMPLE MANTRAS -->
 <div class="mantra-card"><div class="index">૧</div><div>ૐ શ્રી સર્વમંગલાય નમઃ</div></div>
 <div class="mantra-card"><div class="index">૨</div><div>ૐ શ્રી સદ્રૂપાય નમઃ</div></div>
 <div class="mantra-card"><div class="index">૩</div><div>ૐ શ્રી સત્કૃતાય નમઃ</div></div>
@@ -215,16 +273,6 @@ input[type=range]{width:100%}
 <div class="mantra-card"><div class="index">૮</div><div>ૐ શ્રી દયાળુદેવાય નમઃ</div></div>
 <div class="mantra-card"><div class="index">૯</div><div>ૐ શ્રી પરમાત્મને નમઃ</div></div>
 <div class="mantra-card"><div class="index">૧૦</div><div>ૐ શ્રી અનંતાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૧</div><div>ૐ શ્રી અવિનાશિને નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૨</div><div>ૐ શ્રી પરબ્રહ્મણે નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૩</div><div>ૐ શ્રી કરુણાસાગરાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૪</div><div>ૐ શ્રી દયામૂર્તયે નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૫</div><div>ૐ શ્રી પરમેશ્વરાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૬</div><div>ૐ શ્રી અનાદિદેવાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૭</div><div>ૐ શ્રી પરમાત્મને નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૮</div><div>ૐ શ્રી ભક્તપ્રિયાય નમઃ</div></div>
-<div class="mantra-card"><div class="index">૧૯</div><div>ૐ શ્રી કલ્યાણમૂર્તયે નમઃ</div></div>
-<div class="mantra-card"><div class="index">૨૦</div><div>ૐ શ્રી શાશ્વતાય નમઃ</div></div>
 
 <div class="spacer" id="bottomSpace"></div>
 
@@ -256,26 +304,20 @@ const bottomSpace=document.getElementById("bottomSpace");
 
 let offset=0,playing=false,dragging=false,startY,startOffset;
 
-/* SPACERS */
 function setSpacers(){
 const h=scrollArea.offsetHeight/2;
 topSpace.style.height=h+"px";
 bottomSpace.style.height=h+"px";
 }
 
-/* FOCUS */
 function updateFocus(){
 const center=scrollArea.getBoundingClientRect().top + scrollArea.offsetHeight/2;
 list.querySelectorAll(".mantra-card").forEach(card=>{
 const r=card.getBoundingClientRect();
 const dist=Math.abs(center-(r.top+r.height/2));
 const ratio=Math.min(dist/(scrollArea.offsetHeight/2),1);
-
-const scale=1.12-(ratio*0.20);
-const opacity=1-(ratio*0.65);
-
-card.style.transform=`scale(${scale})`;
-card.style.opacity=opacity;
+card.style.transform=`scale(${1.14-(ratio*0.20)})`;
+card.style.opacity=1-(ratio*0.65);
 card.classList.toggle("focused",ratio<0.08);
 });
 }
@@ -285,19 +327,11 @@ list.style.transform=`translateY(-${offset}px)`;
 updateFocus();
 }
 
-/* AUTO */
 function animate(){
 if(!playing||dragging) return;
 offset+=speed.value*0.18;
-
 const max=list.scrollHeight-scrollArea.offsetHeight;
-if(offset>=max){
-offset=max;
-playing=false;
-playBtn.innerText="↻ Restart";
-apply();
-return;
-}
+if(offset>=max){offset=max;playing=false;playBtn.innerText="↻ Restart";apply();return;}
 apply();
 requestAnimationFrame(animate);
 }
@@ -309,76 +343,28 @@ playBtn.innerText=playing?"⏸ Pause":"▶ Start";
 if(playing) animate();
 };
 
-/* DRAG */
-scrollArea.onpointerdown=e=>{
-dragging=true;
-startY=e.clientY;
-startOffset=offset;
-};
-scrollArea.onpointermove=e=>{
-if(!dragging) return;
-offset=startOffset-(e.clientY-startY);
-apply();
-};
-scrollArea.onpointerup=()=>{
-dragging=false;
-if(playing) animate();
-};
+scrollArea.onpointerdown=e=>{dragging=true;startY=e.clientY;startOffset=offset;}
+scrollArea.onpointermove=e=>{if(!dragging)return;offset=startOffset-(e.clientY-startY);apply();}
+scrollArea.onpointerup=()=>{dragging=false;if(playing)animate();}
 
-/* SETTINGS PANEL */
-settingsBtn.onclick=e=>{
-e.stopPropagation();
-panel.classList.toggle("show");
-};
+settingsBtn.onclick=e=>{e.stopPropagation();panel.classList.toggle("show");}
 document.addEventListener("click",e=>{
 if(!panel.contains(e.target)&&!settingsBtn.contains(e.target)){
 panel.classList.remove("show");
-}
-});
+}});
 
-/* ===== MEMORY SYSTEM ===== */
-
-/* LOAD SAVED */
 window.onload=()=>{
 setSpacers();
 apply();
-
-const savedFont=localStorage.getItem("fontSize")||20;
-const savedSpeed=localStorage.getItem("speed")||5;
-const savedTheme=localStorage.getItem("theme");
-
-fontSlider.value=savedFont;
-speed.value=savedSpeed;
-
-document.documentElement.style.setProperty("--fontScale",savedFont/20);
-
-if(savedTheme==="light"){
-document.body.classList.add("light");
-darkToggle.classList.add("active");
-}
 };
 
-/* SAVE FONT */
-fontSlider.oninput=e=>{
-const v=e.target.value;
-document.documentElement.style.setProperty("--fontScale",v/20);
-localStorage.setItem("fontSize",v);
-};
-
-/* SAVE SPEED */
-speed.oninput=e=>{
-localStorage.setItem("speed",e.target.value);
-};
-
-/* SAVE THEME */
 darkToggle.onclick=()=>{
 darkToggle.classList.toggle("active");
 document.body.classList.toggle("light");
+};
 
-localStorage.setItem(
-"theme",
-document.body.classList.contains("light")?"light":"dark"
-);
+fontSlider.oninput=e=>{
+document.documentElement.style.setProperty("--fontScale",e.target.value/20);
 };
 </script>
 
