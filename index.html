@@ -14,7 +14,9 @@
 --glass:rgba(255,255,255,0.06);
 --text:white;
 --headerH:60px;
---fontSize:20px;
+
+/* FONT CONTROL */
+--fontScale:1;
 }
 
 /* LIGHT MODE */
@@ -48,10 +50,9 @@ justify-content:center;
 background:var(--glass);
 backdrop-filter:blur(20px);
 z-index:100;
-font-size:16px;
 }
 
-/* DARK MODE SWITCH */
+/* DARK SWITCH */
 .dark-toggle{
 position:absolute;
 right:16px;
@@ -89,12 +90,10 @@ touch-action:none;
 .mantra-list{
 position:absolute;
 width:100%;
-will-change:transform;
 }
 
 .spacer{height:0;}
 
-/* ORB */
 .orb{
 width:90px;
 height:90px;
@@ -104,7 +103,7 @@ background:radial-gradient(circle,#f6c453,#ff7a00);
 box-shadow:0 0 20px rgba(255,150,0,.3);
 }
 
-/* MANTRA — MOBILE OPTIMIZED */
+/* MANTRA */
 .mantra-card{
 margin:6px 16px;
 padding:12px 14px;
@@ -113,21 +112,17 @@ display:flex;
 align-items:center;
 background:var(--glass);
 
-font-size:clamp(20px,4.5vw,26px);
+/* RESPONSIVE + USER SCALE */
+font-size:calc(clamp(20px,4.5vw,26px) * var(--fontScale));
 line-height:1.6;
 font-weight:500;
 
 opacity:.45;
 transform:scale(.92);
 
-transition:
-transform .25s ease,
-opacity .25s ease,
-box-shadow .25s ease,
-border .25s ease;
+transition:.25s ease;
 }
 
-/* CENTER HIGHLIGHT */
 .mantra-card.focused{
 opacity:1;
 transform:scale(1.12);
@@ -135,7 +130,6 @@ border:1px solid rgba(255,140,0,.45);
 box-shadow:0 0 18px rgba(255,140,0,.25);
 }
 
-/* NUMBER */
 .index{
 min-width:34px;
 height:34px;
@@ -148,7 +142,7 @@ margin-right:12px;
 font-size:15px;
 }
 
-/* PLAY BUTTON */
+/* PLAY */
 .play-main{
 position:fixed;
 bottom:22px;
@@ -163,7 +157,7 @@ cursor:pointer;
 z-index:50;
 }
 
-/* SETTINGS BUTTON */
+/* SETTINGS */
 .fab{
 position:fixed;
 bottom:22px;
@@ -180,7 +174,6 @@ cursor:pointer;
 z-index:60;
 }
 
-/* SETTINGS PANEL */
 .panel{
 position:fixed;
 bottom:-260px;
@@ -214,7 +207,6 @@ input[type=range]{width:100%}
 <div class="mantra-list" id="list">
 
 <div class="spacer" id="topSpace"></div>
-
 <div class="orb"></div>
 
 <!-- 20 MANTRAS -->
@@ -250,7 +242,7 @@ input[type=range]{width:100%}
 
 <div class="panel" id="panel">
 <label>Font Size</label>
-<input type="range" id="fontSlider" min="18" max="34" value="20">
+<input type="range" id="fontSlider" min="12" max="40" value="20">
 <label>Flow Speed</label>
 <input type="range" id="speed" min="1" max="10" value="5">
 </div>
@@ -269,14 +261,14 @@ const bottomSpace=document.getElementById("bottomSpace");
 
 let offset=0,playing=false,dragging=false,startY,startOffset;
 
-/* spacers */
+/* SPACERS */
 function setSpacers(){
 const h=scrollArea.offsetHeight/2;
 topSpace.style.height=h+"px";
 bottomSpace.style.height=h+"px";
 }
 
-/* focus */
+/* FOCUS */
 function updateFocus(){
 const center=scrollArea.getBoundingClientRect().top + scrollArea.offsetHeight/2;
 list.querySelectorAll(".mantra-card").forEach(card=>{
@@ -295,13 +287,12 @@ else card.classList.remove("focused");
 });
 }
 
-/* apply */
 function apply(){
 list.style.transform=`translateY(-${offset}px)`;
 updateFocus();
 }
 
-/* auto */
+/* AUTO */
 function animate(){
 if(!playing||dragging) return;
 offset+=speed.value*0.18;
@@ -314,7 +305,6 @@ playBtn.innerText="↻ Restart";
 apply();
 return;
 }
-
 apply();
 requestAnimationFrame(animate);
 }
@@ -326,7 +316,7 @@ playBtn.innerText=playing?"⏸ Pause":"▶ Start";
 if(playing) animate();
 };
 
-/* drag */
+/* DRAG */
 scrollArea.onpointerdown=e=>{
 dragging=true;
 startY=e.clientY;
@@ -342,7 +332,7 @@ dragging=false;
 if(playing) animate();
 };
 
-/* settings */
+/* SETTINGS */
 settingsBtn.onclick=e=>{
 e.stopPropagation();
 panel.classList.toggle("show");
@@ -353,18 +343,19 @@ panel.classList.remove("show");
 }
 });
 
-/* dark */
+/* DARK */
 darkToggle.onclick=()=>{
 darkToggle.classList.toggle("active");
 document.body.classList.toggle("light");
 };
 
-/* font */
+/* FONT SCALE FIXED */
 fontSlider.oninput=e=>{
-document.documentElement.style.setProperty("--fontSize",e.target.value+"px");
+const scale=e.target.value/20;
+document.documentElement.style.setProperty("--fontScale",scale);
 };
 
-/* init */
+/* INIT */
 window.onload=()=>{
 setSpacers();
 apply();
@@ -372,4 +363,4 @@ apply();
 </script>
 
 </body>
-</html>
+</html
