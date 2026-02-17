@@ -45,11 +45,12 @@ height:var(--headerH);
 display:flex;
 align-items:center;
 justify-content:center;
-backdrop-filter:blur(20px);
 background:var(--glass);
+backdrop-filter:blur(20px);
 z-index:100;
 }
 
+/* DARK TOGGLE */
 .dark-toggle{
 position:absolute;
 right:16px;
@@ -90,6 +91,8 @@ width:100%;
 will-change:transform;
 }
 
+.spacer{height:0;}
+
 .orb{
 width:80px;
 height:80px;
@@ -98,7 +101,7 @@ border-radius:50%;
 background:radial-gradient(circle,#f6c453,#ff7a00);
 }
 
-/* calm focus */
+/* MANTRA */
 .mantra-card{
 margin:4px 14px;
 padding:8px 12px;
@@ -124,7 +127,7 @@ margin-right:10px;
 font-size:12px;
 }
 
-/* play */
+/* PLAY */
 .play-main{
 position:fixed;
 bottom:22px;
@@ -139,7 +142,7 @@ cursor:pointer;
 z-index:50;
 }
 
-/* settings */
+/* SETTINGS BUTTON */
 .fab{
 position:fixed;
 bottom:22px;
@@ -156,6 +159,7 @@ cursor:pointer;
 z-index:60;
 }
 
+/* PANEL */
 .panel{
 position:fixed;
 bottom:-260px;
@@ -188,8 +192,11 @@ input[type=range]{width:100%}
 <div class="scroll-area" id="scrollArea">
 <div class="mantra-list" id="list">
 
+<div class="spacer" id="topSpace"></div>
+
 <div class="orb"></div>
 
+<!-- 20 MANTRAS -->
 <div class="mantra-card"><div class="index">૧</div><div>ૐ શ્રી સર્વમંગલાય નમઃ</div></div>
 <div class="mantra-card"><div class="index">૨</div><div>ૐ શ્રી સદ્રૂપાય નમઃ</div></div>
 <div class="mantra-card"><div class="index">૩</div><div>ૐ શ્રી સત્કૃતાય નમઃ</div></div>
@@ -198,6 +205,20 @@ input[type=range]{width:100%}
 <div class="mantra-card"><div class="index">૬</div><div>ૐ શ્રી કરુણામયાય નમઃ</div></div>
 <div class="mantra-card"><div class="index">૭</div><div>ૐ શ્રી ભક્તવત્સલાય નમઃ</div></div>
 <div class="mantra-card"><div class="index">૮</div><div>ૐ શ્રી દયાળુદેવાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૯</div><div>ૐ શ્રી પરમાત્મને નમઃ</div></div>
+<div class="mantra-card"><div class="index">૧૦</div><div>ૐ શ્રી અનંતાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૧૧</div><div>ૐ શ્રી અવિનાશિને નમઃ</div></div>
+<div class="mantra-card"><div class="index">૧૨</div><div>ૐ શ્રી પરબ્રહ્મણે નમઃ</div></div>
+<div class="mantra-card"><div class="index">૧૩</div><div>ૐ શ્રી કરુણાસાગરાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૧૪</div><div>ૐ શ્રી દયામૂર્તયે નમઃ</div></div>
+<div class="mantra-card"><div class="index">૧૫</div><div>ૐ શ્રી પરમેશ્વરાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૧૬</div><div>ૐ શ્રી અનાદિદેવાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૧૭</div><div>ૐ શ્રી પરમાત્મને નમઃ</div></div>
+<div class="mantra-card"><div class="index">૧૮</div><div>ૐ શ્રી ભક્તપ્રિયાય નમઃ</div></div>
+<div class="mantra-card"><div class="index">૧૯</div><div>ૐ શ્રી કલ્યાણમૂર્તયે નમઃ</div></div>
+<div class="mantra-card"><div class="index">૨૦</div><div>ૐ શ્રી શાશ્વતાય નમઃ</div></div>
+
+<div class="spacer" id="bottomSpace"></div>
 
 </div>
 </div>
@@ -216,14 +237,23 @@ input[type=range]{width:100%}
 <script>
 const list=document.getElementById("list");
 const scrollArea=document.getElementById("scrollArea");
-const speed=document.getElementById("speed");
 const playBtn=document.getElementById("playBtn");
+const speed=document.getElementById("speed");
 const panel=document.getElementById("panel");
 const settingsBtn=document.getElementById("settingsBtn");
 const darkToggle=document.getElementById("darkToggle");
 const fontSlider=document.getElementById("fontSlider");
+const topSpace=document.getElementById("topSpace");
+const bottomSpace=document.getElementById("bottomSpace");
 
 let offset=0,playing=false,dragging=false,startY,startOffset;
+
+/* spacers */
+function setSpacers(){
+const h=scrollArea.offsetHeight/2;
+topSpace.style.height=h+"px";
+bottomSpace.style.height=h+"px";
+}
 
 /* focus */
 function updateFocus(){
@@ -246,54 +276,25 @@ updateFocus();
 /* auto */
 function animate(){
 if(!playing||dragging) return;
-
 offset+=speed.value*0.15;
 
-/* STOP AT END */
-const maxScroll=list.scrollHeight-scrollArea.offsetHeight;
-if(offset>=maxScroll){
-offset=maxScroll;
+const max=list.scrollHeight-scrollArea.offsetHeight;
+if(offset>=max){
+offset=max;
 playing=false;
 playBtn.innerText="↻ Restart";
 apply();
 return;
 }
-
 apply();
 requestAnimationFrame(animate);
 }
 
-/* play */
 playBtn.onclick=()=>{
-if(!playing && playBtn.innerText==="↻ Restart"){
-offset=0;
-}
-
+if(!playing && playBtn.innerText==="↻ Restart") offset=0;
 playing=!playing;
 playBtn.innerText=playing?"⏸ Pause":"▶ Start";
 if(playing) animate();
-};
-
-/* settings */
-settingsBtn.onclick=e=>{
-e.stopPropagation();
-panel.classList.toggle("show");
-};
-document.addEventListener("click",e=>{
-if(!panel.contains(e.target)&&!settingsBtn.contains(e.target)){
-panel.classList.remove("show");
-}
-});
-
-/* theme */
-darkToggle.onclick=()=>{
-darkToggle.classList.toggle("active");
-document.body.classList.toggle("light");
-};
-
-/* font */
-fontSlider.oninput=e=>{
-document.documentElement.style.setProperty("--fontSize",e.target.value+"px");
 };
 
 /* drag */
@@ -310,6 +311,34 @@ apply();
 scrollArea.onpointerup=()=>{
 dragging=false;
 if(playing) animate();
+};
+
+/* settings */
+settingsBtn.onclick=e=>{
+e.stopPropagation();
+panel.classList.toggle("show");
+};
+document.addEventListener("click",e=>{
+if(!panel.contains(e.target)&&!settingsBtn.contains(e.target)){
+panel.classList.remove("show");
+}
+});
+
+/* dark */
+darkToggle.onclick=()=>{
+darkToggle.classList.toggle("active");
+document.body.classList.toggle("light");
+};
+
+/* font */
+fontSlider.oninput=e=>{
+document.documentElement.style.setProperty("--fontSize",e.target.value+"px");
+};
+
+/* init */
+window.onload=()=>{
+setSpacers();
+apply();
 };
 </script>
 
